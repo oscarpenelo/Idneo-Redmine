@@ -36,7 +36,7 @@ def run_threaded(job_fn):
     job_thread.start()
 
 if args.d is not None:
-    schedule.every().day.at("15:30").do(run_threaded, track_today)
+    schedule.every().day.at("15:00").do(run_threaded, track_today)
 
     while True:
         schedule.run_pending()
