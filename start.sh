@@ -9,7 +9,7 @@ if [ $# -eq 0 ]
     display_usage
     exit 0
 fi
-while getopts u:p:i option
+while getopts u:p:i: option
 do
 case "${option}"
 in
@@ -25,5 +25,5 @@ sudo docker build -t idneoredmine .
 
 
 
-
+echo ISSUE $ISSUE
 sudo docker run --restart=always -d --name idneoredmine -p 80 -i -t idneoredmine python redmine.py -u $USER -p $PASS -i $ISSUE -d
