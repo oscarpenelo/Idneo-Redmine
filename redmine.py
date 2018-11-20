@@ -17,7 +17,7 @@ parser.add_argument('-i', type=int, help="issueid")
 parser.add_argument('-m', type=int, help="month")
 parser.add_argument('-y', type=int, help="year")
 
-parser.add_argument('-d',  action='store_true', help="daemon")
+parser.add_argument('-d',  action='store_true', help="daemon",default=argparse.SUPPRESS)
 
 args = parser.parse_args()
 
@@ -34,8 +34,8 @@ def track_today():
 def run_threaded(job_fn):
     job_thread = threading.Thread(target=job_fn)
     job_thread.start()
+if 'd' in args:
 
-if args.d is not None:
     schedule.every().day.at("15:00").do(run_threaded, track_today)
 
     while True:
