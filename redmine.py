@@ -9,6 +9,7 @@ import datetime
 import schedule
 import threading
 import time
+
 print('IDNEO REMDINE SCHEDULER - BY OSCAR PENELO')
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('-u', type=str, help="username")
@@ -16,43 +17,58 @@ parser.add_argument('-p', type=str, help="password")
 parser.add_argument('-i', type=int, help="issueid")
 parser.add_argument('-m', type=int, help="month")
 parser.add_argument('-y', type=int, help="year")
+parser.add_argument('-exclude',
+                    type=str,
+                    help="Define a list of days separated by comma. Ex: \"01,02,20\"")
 
-parser.add_argument('-d',  action='store_true', help="daemon",default=argparse.SUPPRESS)
+parser.add_argument('-d', action='store_true', help="daemon", default=argparse.SUPPRESS)
 
 args = parser.parse_args()
 
 redmine = Redmine('https://idneo.easyredmine.com', username=args.u, password=args.p)
-def track_today(): 
-    d=datetime.datetime.now()
-    if (d.weekday() >= 0) and (d.weekday()<=4):
-        print("TRACKING " + str(d.day) + "/" + str(d.month) +"/" + str(d.year))
+
+
+def track_today():
+    d = datetime.datetime.now()
+    if (d.weekday() >= 0) and (d.weekday() <= 4):
+        print("TRACKING " + str(d.day) + "/" + str(d.month) + "/" + str(d.year))
         try:
-            time_entry= redmine.time_entry.create(issue_id=args.i,spent_on=d,hours=8)
+            time_entry = redmine.time_entry.create(issue_id=args.i, spent_on=d, hours=8)
         except Exception as e:
-            print('**Track error: '+ str(e))
+            print('**Track error: ' + str(e))
+
 
 def run_threaded(job_fn):
     job_thread = threading.Thread(target=job_fn)
     job_thread.start()
-if 'd' in args:
 
+
+def excluding_days(exclude_argument):
+    exclude_arg = exclude_argument
+    exclude_int_arg = list(map(int, exclude_arg.split(",")))
+    return exclude_int_arg
+
+
+if 'd' in args:
     schedule.every().day.at("15:00").do(run_threaded, track_today)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-
 else:
+    d = datetime.date(args.y, args.m, 1)
 
+    exclude_int_arg = excluding_days(args.exclude)
 
-    d=datetime.date(args.y,args.m,1)
     while d.month == args.m:
-        if (d.weekday() >= 0) and (d.weekday()<=4):
-            print("TRACKING " + str(d.day) + "/" + str(d.month) +"/" + str(d.year))
-            try:
-                time_entry= redmine.time_entry.create(issue_id=args.i,spent_on=d,hours=8)
-            except Exception as e:
-                print('**Track error: '+ str(e))
+        if (d.weekday() >= 0) and (d.weekday() <= 4):
+            if int(d.day) not in exclude_int_arg:
+                print("TRACKING " + str(d.day) + "/" + str(d.month) + "/" + str(d.year))
+                try:
+                    time_entry = redmine.time_entry.create(issue_id=args.i, spent_on=d, hours=8)
+                except Exception as e:
+                    print('**Track error: ' + str(e))
+            else:
+                print("day " + str(d.day) + " was excluded")
         d += datetime.timedelta(days=1)
-
