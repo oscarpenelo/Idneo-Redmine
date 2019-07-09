@@ -25,7 +25,7 @@ parser.add_argument('-d', action='store_true', help="daemon", default=argparse.S
 
 args = parser.parse_args()
 
-redmine = Redmine('https://idneo.easyredmine.com', username=args.u, password=args.p)
+redmine = Redmine('https://idneo.easyredmine.com', username=args.user, password=args.password)
 
 
 def track_today():
@@ -33,7 +33,7 @@ def track_today():
     if (d.weekday() >= 0) and (d.weekday() <= 4):
         print("TRACKING " + str(d.day) + "/" + str(d.month) + "/" + str(d.year))
         try:
-            time_entry = redmine.time_entry.create(issue_id=args.i, spent_on=d, hours=8)
+            time_entry = redmine.time_entry.create(issue_id=args.issueid, spent_on=d, hours=8)
         except Exception as e:
             print('**Track error: ' + str(e))
 
@@ -57,11 +57,11 @@ if 'd' in args:
         time.sleep(1)
 
 else:
-    d = datetime.date(args.y, args.m, 1)
+    d = datetime.date(args.year, args.month, 1)
 
     exclude_int_arg = excluding_days(args.exclude)
 
-    while d.month == args.m:
+    while d.month == args.month:
         if (d.weekday() >= 0) and (d.weekday() <= 4):
             if int(d.day) not in exclude_int_arg:
                 print("TRACKING " + str(d.day) + "/" + str(d.month) + "/" + str(d.year))
