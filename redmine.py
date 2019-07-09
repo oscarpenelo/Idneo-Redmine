@@ -12,14 +12,14 @@ import time
 
 print('IDNEO REMDINE SCHEDULER - BY OSCAR PENELO')
 parser = argparse.ArgumentParser(add_help=True)
-parser.add_argument('-u', type=str, help="username")
-parser.add_argument('-p', type=str, help="password")
-parser.add_argument('-i', type=int, help="issueid")
-parser.add_argument('-m', type=int, help="month")
-parser.add_argument('-y', type=int, help="year")
-parser.add_argument('-exclude',
-                    type=str,
+parser.add_argument('-u', "--user", type=str, help="username")
+parser.add_argument('-p', "--password", type=str, help="password")
+parser.add_argument('-i', "--issueid", type=int, help="issueid")
+parser.add_argument('-m', "--month", type=int, help="month")
+parser.add_argument('-y', "--year", type=int, help="year")
+parser.add_argument('-e', "--exclude", type=str,
                     help="Define a list of days separated by comma. Ex: \"01,02,20\"")
+
 
 parser.add_argument('-d', action='store_true', help="daemon", default=argparse.SUPPRESS)
 
