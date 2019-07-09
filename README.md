@@ -7,7 +7,7 @@ Idneo Redmine Bot.
 ### Requirements
 * Idneo member
 * Linux
-* Docker or Python 2.7
+* Docker or Python 3
 
 
 ## Usage
@@ -20,8 +20,8 @@ Every day at 3:00 pm a day will be tracked (requires docker)
 
 Tracks an entire month:
 
-`$ python redmine.py -u [USERNAME] -p [PASSWORD] -i [ISSUEID] -m [MONTH NUMBER] -y [YEAR]`
-
+`$ python redmine.py -u [USERNAME] -p [PASSWORD] -i [ISSUEID] -m [MONTH NUMBER] -y [YEAR] -e [EXCLUDED DAYS]`
+`$ python redmine.py --username [USERNAME] --password [PASSWORD] --issueid [ISSUEID] --month [MONTH NUMBER] --year [YEAR] -exclude [EXCLUDED DAYS]`
 
 
 
