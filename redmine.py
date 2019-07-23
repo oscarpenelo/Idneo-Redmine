@@ -59,14 +59,15 @@ if 'd' in args:
 else:
     d = datetime.date(args.year, args.month, 1)
 
-    exclude_int_arg = excluding_days(args.exclude)
-
+    exclude_int_arg = []
+    if args.exclude is not None:
+        exclude_int_arg = excluding_days(args.exclude)
     while d.month == args.month:
         if (d.weekday() >= 0) and (d.weekday() <= 4):
             if int(d.day) not in exclude_int_arg:
                 print("TRACKING " + str(d.day) + "/" + str(d.month) + "/" + str(d.year))
                 try:
-                    time_entry = redmine.time_entry.create(issue_id=args.i, spent_on=d, hours=8)
+                    time_entry = redmine.time_entry.create(issue_id=args.issueid, spent_on=d, hours=8)
                 except Exception as e:
                     print('**Track error: ' + str(e))
             else:
